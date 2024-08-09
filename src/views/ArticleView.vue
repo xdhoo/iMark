@@ -1,30 +1,49 @@
 <template>
   <div>
     <div class="typing-area">
-      <input type="text" placeholder="Title" v-model="formData.title" />
-      <textarea name="" id="" rows="10" placeholder="Typing" v-model="formData.content"></textarea>
-    </div>
-
-    <div class="btn-block">
-      <el-button @click="handleArticleSave">Save</el-button>
+      <template v-if="!editing">
+        <h2>{{ formData.title }}</h2>
+        <div class="content" style="white-space: pre-wrap">{{ formData.content }}</div>
+        <div class="btn-block">
+          <el-button type="success" @click="handleBack">Back</el-button>
+          <el-button type="primary" @click="editing = true">Edit</el-button>
+        </div>
+      </template>
+      <template v-else>
+        <div>
+          <input type="text" placeholder="Title" v-model="formData.title" />
+        </div>
+        <div>
+          <textarea
+            name=""
+            id=""
+            rows="15"
+            placeholder="Typing"
+            v-model="formData.content"
+          ></textarea>
+        </div>
+        <div class="btn-block">
+          <el-button @click="editing = false">Cancel</el-button>
+          <el-button type="success" @click="handleArticleSave">Save</el-button>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { getArticle, saveArticle } from '../services'
 
 const route = useRoute()
+const router = useRouter()
 
 const formData = ref({ title: '', content: '' })
+const editing = ref(false)
 
 onMounted(() => {
-  console.log(route.params)
-  const id = route.params.id
-  axios
-    .get('api/article', { params: { id } })
+  getArticle(route.params.id)
     .then((res) => {
       formData.value = res.data
     })
@@ -34,25 +53,38 @@ onMounted(() => {
 })
 
 const handleArticleSave = () => {
-  console.log(formData.value)
-
-  axios
-    .post('api/article', formData.value)
+  saveArticle(formData.value)
     .then((res) => {
       console.log('response', res)
+      editing.value = false
     })
     .catch((err) => console.log('err', err))
+}
+
+const handleBack = () => {
+  router.push({ path: '/articles' })
 }
 </script>
 <style scoped lang="scss">
 .typing-area {
-  input,
+  .content {
+    width: 620px;
+  }
+  input {
+    border: none;
+    outline: none;
+    width: 620px;
+    padding: 10px;
+    border-bottom: 1px solid #dedede;
+    margin-bottom: 12px;
+  }
   textarea {
     border: none;
     outline: none;
-    width: 100%;
+    width: 620px;
     padding: 10px;
-    border-bottom: 1px solid #dedede;
+    border: 1px solid #dedede;
+    border-radius: 12px;
   }
 }
 .btn-block {

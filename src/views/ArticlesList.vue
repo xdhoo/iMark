@@ -7,16 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getArticles } from '../services/index'
 
 const router = useRouter()
 const articles = ref([])
 
 onMounted(() => {
-  axios
-    .get('/api/articles')
+  getArticles()
     .then((res) => {
       articles.value = res.data
       console.log(res)
