@@ -5,6 +5,7 @@
         <h2>{{ formData.title }}</h2>
         <div class="content" style="white-space: pre-wrap">{{ formData.content }}</div>
         <div class="btn-block">
+          <el-button type="success" @click="handleAddNote">Add Note</el-button>
           <el-button type="success" @click="handleBack">Back</el-button>
           <el-button type="primary" @click="editing = true">Edit</el-button>
         </div>
@@ -34,7 +35,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getArticle, saveArticle } from '../services'
+import { addNote, getArticle, saveArticle } from '../services'
 
 const route = useRoute()
 const router = useRouter()
@@ -63,6 +64,10 @@ const handleArticleSave = () => {
 
 const handleBack = () => {
   router.push({ path: '/articles' })
+}
+
+const handleAddNote = () => {
+  addNote({ id: route.params.id, note: { text: 'exploits' } })
 }
 </script>
 <style scoped lang="scss">

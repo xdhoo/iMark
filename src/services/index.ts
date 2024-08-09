@@ -12,3 +12,7 @@ export const getArticle = (id: string) => {
 export const saveArticle = (data) => {
   return axios.post(`${API_URL}/article`, data)
 }
+
+export const addNote = (data) => {
+  return axios.post(`${API_URL}/add_note`, data)
+}
