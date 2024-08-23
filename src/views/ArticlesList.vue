@@ -1,7 +1,12 @@
 <template>
   <div class="articles-list">
-    <div class="article-item" v-for="article in articles" :key="article.title">
-      <div class="title" @click="handleArticle(article._id)">{{ article.title }}</div>
+    <div
+      class="article-item"
+      v-for="article in articles"
+      :key="article.title"
+      @click="handleArticle(article._id)"
+    >
+      <div class="title">{{ article.title }}</div>
     </div>
   </div>
 </template>
@@ -42,6 +47,14 @@ const handleArticle = (id: string) => {
     width: 200px;
     height: 100px;
     margin: 10px;
+    cursor: pointer;
+
+    &:hover {
+      border-width: 2px;
+      border-color: #09a9b1;
+      color: #09a9b1;
+      box-shadow: 2px 2px #09a9b1;
+    }
 
     .title {
       font-size: 24px;

@@ -106,7 +106,7 @@ let noteForm = reactive({
   _id: '',
   text: '',
   property: '',
-  related: [],
+  related: '',
   en_explain: '',
   others: ''
 })
