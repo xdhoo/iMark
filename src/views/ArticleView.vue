@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="typing-area">
       <template v-if="!editing">
-        <h2>{{ formData.title }}</h2>
+        <h2 class="title">{{ formData.title }}</h2>
         <div class="content" style="white-space: pre-wrap">{{ formData.content }}</div>
         <div class="btn-block">
           <el-button type="success" @click="handleBack">Back</el-button>
@@ -29,16 +29,20 @@
       </template>
     </div>
     <div class="note-area">
-      <div class="note-area-header">
-        <h2>Notes</h2>
-        <el-button type="info" @click="dialogVisible = true" size="small">+ Add Note</el-button>
-      </div>
+      <h2 class="title">
+        Notes
+        <el-button type="info" @click="dialogVisible = true" size="small" style="margin-left: 10px"
+          >+ Add Note</el-button
+        >
+      </h2>
       <div class="note-area-content">
         <template v-for="note in notes" :key="note._id">
           <div class="note-item">
             <h3 @click="handleNoteEdit(note)">{{ note.text }} {{ note.property }}</h3>
             <span>{{ note.en_explain }}</span>
-            <div>{{ note.related }}</div>
+            <div v-if="note.related">
+              <span style="color: #00bf19">Similar:</span> {{ note.related }}
+            </div>
             <div>{{ note.others }}</div>
           </div>
         </template>
@@ -162,6 +166,10 @@ const handleNoteEdit = (note) => {
 <style scoped lang="scss">
 .wrapper {
   display: flex;
+  h2.title {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
   .typing-area {
     .content {
       width: 620px;
@@ -195,15 +203,6 @@ const handleNoteEdit = (note) => {
     margin-left: 30px;
     border-left: 1px solid #dadada;
     padding-left: 16px;
-
-    &-header {
-      display: flex;
-      align-items: center;
-
-      h2 {
-        margin-right: 12px;
-      }
-    }
 
     &-content {
       .note-item {
