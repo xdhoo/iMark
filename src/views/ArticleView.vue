@@ -94,15 +94,16 @@ import { onMounted, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { addNote, getArticle, saveArticle } from '../services'
 import type { FormInstance } from 'element-plus'
+import type { Note } from '../../types/index'
 
 const route = useRoute()
 const router = useRouter()
 
 const formData = ref({ title: '', content: '' })
 const editing = ref(false)
-const notes = ref([])
+const notes = ref<Note[]>([])
 const dialogVisible = ref(false)
-let noteForm = reactive({
+let noteForm = reactive<Note>({
   _id: '',
   text: '',
   property: '',
@@ -121,7 +122,7 @@ onMounted(() => {
 })
 
 const fetchArticle = () => {
-  getArticle(route.params.id)
+  getArticle(route.params.id as string)
     .then((res) => {
       formData.value = res.data
       notes.value = res.data.notes
@@ -148,7 +149,7 @@ const noteSaveHandle = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      addNote({ id: route.params.id, note: noteForm }).then((res) => {
+      addNote({ id: route.params.id as string, note: noteForm }).then((res) => {
         dialogVisible.value = false
         fetchArticle()
       })
@@ -158,7 +159,7 @@ const noteSaveHandle = async (formEl: FormInstance | undefined) => {
   })
 }
 
-const handleNoteEdit = (note) => {
+const handleNoteEdit = (note: Note) => {
   noteForm = note
   dialogVisible.value = true
 }

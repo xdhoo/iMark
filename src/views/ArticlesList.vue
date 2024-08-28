@@ -14,10 +14,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import type { Article } from '../../types'
 import { getArticles } from '../services/index'
 
 const router = useRouter()
-const articles = ref([])
+const articles = ref<Article[]>([])
 
 onMounted(() => {
   getArticles()
@@ -30,7 +31,7 @@ onMounted(() => {
     })
 })
 
-const handleArticle = (id: string) => {
+const handleArticle = (id?: string) => {
   router.push({ path: `article/${id}` })
 }
 </script>
