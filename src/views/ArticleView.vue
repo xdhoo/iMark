@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper">
     <div class="typing-area">
+      <div class="back-btn">
+        <el-button :icon="DArrowLeft" circle @click="handleBack" />
+      </div>
       <template v-if="!editing">
         <h2 class="title">{{ formData.title }}</h2>
         <div class="content" style="white-space: pre-wrap">{{ formData.content }}</div>
         <div class="btn-block">
-          <el-button type="success" @click="handleBack">Back</el-button>
           <el-button type="primary" @click="editing = true">Edit</el-button>
         </div>
       </template>
@@ -95,6 +97,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { addNote, getArticle, saveArticle } from '../services'
 import type { FormInstance } from 'element-plus'
 import type { Note } from '../../types/index'
+import { DArrowLeft } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -118,7 +121,11 @@ const rules = reactive({
 const noteFormRef = ref<FormInstance>()
 
 onMounted(() => {
-  fetchArticle()
+  if (route.params.id) {
+    fetchArticle()
+  } else {
+    editing.value = true
+  }
 })
 
 const fetchArticle = () => {
@@ -172,6 +179,12 @@ const handleNoteEdit = (note: Note) => {
     margin-bottom: 10px;
   }
   .typing-area {
+    position: relative;
+    .back-btn {
+      position: absolute;
+      left: -43px;
+      top: 3px;
+    }
     .content {
       width: 620px;
     }

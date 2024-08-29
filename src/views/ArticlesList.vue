@@ -1,12 +1,17 @@
 <template>
-  <div class="articles-list">
-    <div
-      class="article-item"
-      v-for="article in articles"
-      :key="article.title"
-      @click="handleArticle(article._id)"
-    >
-      <div class="title">{{ article.title }}</div>
+  <div>
+    <div class="articles-list">
+      <div
+        class="article-item"
+        v-for="article in articles"
+        :key="article.title"
+        @click="handleArticle(article._id)"
+      >
+        <div class="title">{{ article.title }}</div>
+      </div>
+    </div>
+    <div class="btn">
+      <el-button @click="handleAddNew">+ Add New Article</el-button>
     </div>
   </div>
 </template>
@@ -33,6 +38,10 @@ onMounted(() => {
 
 const handleArticle = (id?: string) => {
   router.push({ path: `article/${id}` })
+}
+
+const handleAddNew = () => {
+  router.push({ name: 'article' })
 }
 </script>
 
@@ -62,5 +71,10 @@ const handleArticle = (id?: string) => {
       font-weight: 600;
     }
   }
+}
+
+.btn {
+  padding: 12px;
+  text-align: right;
 }
 </style>
