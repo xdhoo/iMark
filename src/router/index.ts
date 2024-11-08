@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/articles',
       name: 'articles',
       component: () => import('../views/ArticlesList.vue')
+    },
+    {
+      path: '/swim',
+      name: 'swim',
+      component: () => import('../views/SwimCount.vue')
     }
   ]
 })
