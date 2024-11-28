@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
+import type { ActiveDateMap } from 'types'
 
 const generatorMonth = (month: Date) => {
   const startOfMonth = dayjs(month).startOf('month')
@@ -44,7 +45,7 @@ const generatorMonthList = (start: Date | string, end: Date | string): Dayjs[] =
 }
 
 const transActiveMapping = (list: string[]) => {
-  const activeMapping: { [key: number]: { [key: number]: { [key: number]: boolean } } } = {}
+  const activeMapping: ActiveDateMap = {}
   list.forEach((item) => {
     const _dayjs = dayjs(item)
     const year = _dayjs.year()

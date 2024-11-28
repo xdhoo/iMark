@@ -11,3 +11,7 @@ export interface Article {
   _id?: string
   title: string
 }
+
+export interface ActiveDateMap {
+  [key: number]: { [key: number]: { [key: number]: boolean } }
+}

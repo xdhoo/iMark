@@ -12,9 +12,10 @@
 <script lang="ts" setup>
 import { Dayjs } from 'dayjs'
 import calendarUtil from '../../util/calendar.util'
+import type { ActiveDateMap } from 'types'
 const props = defineProps<{
   month: Dayjs
-  activeDays: { [key: number]: { [key: number]: { [key: number]: boolean } } }
+  activeDays: ActiveDateMap | null
 }>()
 
 const calendar = calendarUtil.generatorMonth(props.month.toDate())
