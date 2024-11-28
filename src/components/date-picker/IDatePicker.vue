@@ -1,0 +1,79 @@
+<template>
+  <div class="i-date-picker">
+    <div class="i-date-picker-row">
+      <template v-for="(day, index) in dateList" :key="index">
+        <div :class="['cell', day.isSame(active, 'day') && 'active']" @click="handleClick(day)">
+          <p>{{ dayMap[day.day()] }}</p>
+          <span>{{ day.date() }}</span>
+        </div>
+      </template>
+      <div id="end_target"></div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { onMounted } from 'vue'
+import calendarUtil from '../../util/calendar.util'
+import dayjs, { Dayjs } from 'dayjs'
+
+const props = defineProps<{
+  active: Dayjs | Date
+}>()
+
+const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+const dateList = calendarUtil.generatorDateList('2024-11-01', new Date())
+const emit = defineEmits(['on-change'])
+
+onMounted(() => {
+  setTimeout(() => {
+    document.getElementById('end_target')?.scrollIntoView()
+  }, 100)
+})
+
+const handleClick = (date: Dayjs) => {
+  emit('on-change', date)
+}
+</script>
+
+<style lang="scss" scoped>
+.i-date-picker {
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  &-row {
+    display: flex;
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    overflow-x: auto;
+    .cell {
+      width: 52px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      text-align: center;
+      padding: 4px 0;
+      p {
+        color: #6c6c6c;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      span {
+        font-size: 18px;
+        font-weight: 700;
+        color: #505050;
+      }
+    }
+    .cell.active {
+      background-color: #09a9b1;
+      p,
+      span {
+        color: #fff;
+      }
+    }
+  }
+}
+</style>

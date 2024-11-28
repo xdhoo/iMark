@@ -64,8 +64,20 @@ const transActiveMapping = (list: string[]) => {
   return activeMapping
 }
 
+const generatorDateList = (start: Date | string, end: Date | string) => {
+  const dateList: Dayjs[] = []
+  let min = dayjs(start)
+  const max = dayjs(end)
+  while (min.isBefore(max)) {
+    dateList.push(min)
+    min = min.add(1, 'day')
+  }
+  return dateList
+}
+
 export default {
   generatorMonth,
   generatorMonthList,
-  transActiveMapping
+  transActiveMapping,
+  generatorDateList
 }

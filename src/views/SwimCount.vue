@@ -5,6 +5,10 @@
       <span class="highlight"> {{ records.length }} </span>天
     </div>
     <ICalendar :records="records" start="2024-01-01" end="2024-12-31" />
+    <div class="slogan">
+      <div class="slogan-dream">DREAM</div>
+      <div class="slogan-big">BIG</div>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -34,6 +38,22 @@ onMounted(() => {
     .highlight {
       font-weight: 600;
       font-size: 18px;
+    }
+  }
+  .slogan {
+    margin-top: 12px;
+    &-dream {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 56px;
+      color: #acacac;
+    }
+    &-big {
+      font-size: 86px;
+      font-weight: 700;
+      line-height: 18px;
+      text-align: right;
+      color: #1dadb5;
     }
   }
 }

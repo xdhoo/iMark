@@ -1,7 +1,8 @@
 import axios from 'axios'
 import type { Article, Note } from '../../types'
+import conf from '@/conf'
 
-const API_URL = 'api'
+const API_URL = conf.API_URL
 export const getArticles = () => {
   return axios.get(`${API_URL}/articles`)
 }
