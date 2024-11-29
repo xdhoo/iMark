@@ -41,7 +41,7 @@ const isActive = (_date: Dayjs | null) => {
   }
 
   &-cell.active-cell {
-    background-color: #40cffb;
+    background-color: #1eadb5;
   }
 }
 </style>

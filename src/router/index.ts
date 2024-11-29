@@ -36,6 +36,11 @@ const router = createRouter({
       path: '/swim',
       name: 'swim',
       component: () => import('../views/SwimCount.vue')
+    },
+    {
+      path: '/check',
+      name: 'check',
+      component: () => import('../views/CheckView.vue')
     }
   ]
 })

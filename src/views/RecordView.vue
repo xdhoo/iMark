@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="date-block">
-        <IDatePicker :active="form.date" @on-change="handleDateChange" />
+        <IDatePicker :records="records" :active="form.date" @on-change="handleDateChange" />
       </div>
       <div class="record-btn" @click="handleRecord">Record</div>
     </div>
@@ -21,15 +21,38 @@
     <div class="back" @click="toCheck">
       <el-icon size="20"><DArrowRight /></el-icon>
     </div>
+    <el-dialog
+      v-model="dialogVisible"
+      width="80%"
+      :show-close="false"
+      @close="loading = false"
+      @opened="handleOpened"
+    >
+      <template #header="{ titleId, titleClass }">
+        <div class="i-dialog-header">
+          <h4 :id="titleId" :class="titleClass">Input The Verify Code</h4>
+        </div>
+      </template>
+      <div>
+        <el-input
+          ref="inputRef"
+          placeholder="Verify Code"
+          v-model="verifyCode"
+          size="large"
+          :autofocus="true"
+        />
+        <div class="confirm-btn" @click="handleConfirm">OK</div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { saveRecord } from '../services/index'
+import { getRecords, saveRecord } from '../services/index'
 import dayjs from 'dayjs'
 import IDatePicker from '../components/date-picker/IDatePicker.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import conf from '@/conf'
 
 const form = reactive({
@@ -38,58 +61,75 @@ const form = reactive({
 })
 const router = useRouter()
 const loading = ref(false)
+let records = ref<{ type: string; date: string }[]>([])
+const dialogVisible = ref(false)
+const verifyCode = ref('')
+const inputRef = ref()
+
+onMounted(() => {
+  fetchRecord()
+})
+
+const fetchRecord = () => {
+  getRecords('swim')
+    .then((res) => {
+      records.value = res.data
+    })
+    .catch((err) => console.log(err))
+}
 
 const handleRecord = () => {
+  dialogVisible.value = true
   loading.value = true
+  verifyCode.value = ''
+}
+
+const handleConfirm = () => {
   const params = {
     type: form.type,
     date: dayjs(form.date).format('YYYY-MM-DD')
   }
-  ElMessageBox.prompt('Please input your verify code', 'Tip', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel'
-  })
-    .then(({ value }) => {
-      if (value === conf.VERIFY_CODE) {
-        saveRecord(params)
-          .then((res) => {
-            ElMessage({
-              message: 'Record Successful',
-              type: 'success',
-              plain: true
-            })
-          })
-          .catch((err) => {
-            ElMessage({
-              message: 'Record Failed',
-              type: 'error',
-              plain: true
-            })
-          })
-          .finally(() => (loading.value = false))
-      } else {
-        loading.value = false
+  if (verifyCode.value === conf.VERIFY_CODE) {
+    saveRecord(params)
+      .then(() => {
         ElMessage({
-          type: 'error',
-          message: 'Verify Failed.'
+          message: 'Record Successful',
+          type: 'success',
+          plain: true
         })
-      }
-    })
-    .catch(() => {
-      loading.value = false
-      ElMessage({
-        type: 'error',
-        message: 'Verify Failed.'
+        fetchRecord()
       })
+      .catch(() => {
+        ElMessage({
+          message: 'Record Failed',
+          type: 'error',
+          plain: true
+        })
+      })
+      .finally(() => {
+        loading.value = false
+        dialogVisible.value = false
+      })
+  } else {
+    loading.value = false
+    dialogVisible.value = false
+    ElMessage({
+      type: 'error',
+      message: 'Verify Failed.'
     })
+  }
 }
 
-const handleDateChange = (date) => {
+const handleDateChange = (date: Date) => {
   form.date = date
 }
 
 const toCheck = () => {
   router.push({ name: 'swim' })
+}
+
+const handleOpened = () => {
+  inputRef.value.focus()
 }
 </script>
 
@@ -151,6 +191,29 @@ const toCheck = () => {
     position: absolute;
     bottom: 20px;
     right: 20px;
+  }
+  .i-dialog-header {
+    h4 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+  :deep(.el-dialog) {
+    --el-dialog-border-radius: 12px;
+    padding: 22px;
+  }
+  .confirm-btn {
+    width: 100%;
+    color: #fff;
+    background-color: #000;
+    font-weight: 500;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    padding: 6px 0;
+    cursor: pointer;
+    margin-top: 12px;
   }
 }
 </style>

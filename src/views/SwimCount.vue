@@ -36,8 +36,9 @@ onMounted(() => {
     font-size: 14px;
     color: #7c7c7c;
     .highlight {
-      font-weight: 600;
-      font-size: 18px;
+      font-weight: 700;
+      font-size: 24px;
+      color: #1dadb5;
     }
   }
   .slogan {
