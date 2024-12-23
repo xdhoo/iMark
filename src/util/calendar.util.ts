@@ -51,8 +51,8 @@ const transActiveMapping = (list: string[]) => {
     const year = _dayjs.year()
     const month = _dayjs.month()
     const day = _dayjs.date()
-    if (activeMapping.hasOwnProperty(year)) {
-      if (activeMapping[year].hasOwnProperty(month)) {
+    if (Object.prototype.hasOwnProperty.call(activeMapping, year)) {
+      if (Object.prototype.hasOwnProperty.call(activeMapping[year], month)) {
         activeMapping[year][month][day] = true
       } else {
         activeMapping[year][month] = { [day]: true }
@@ -75,9 +75,32 @@ const generatorDateList = (start: Date | string, end: Date | string) => {
   return dateList
 }
 
+const generatorDayList = (start: Date | string, end: Date | string) => {
+  let min = dayjs(start).set('date', 1)
+  const max = dayjs(end)
+  const dayList: { yearTag?: Dayjs; chunk: Dayjs[] }[] = []
+  let chunk: Dayjs[] = []
+  let yearTag
+  while (min.isBefore(max)) {
+    if (min.month() === 0 && min.date() === 1) yearTag = min
+    chunk.push(min)
+    if (chunk.length === 14) {
+      dayList.push({ yearTag, chunk })
+      chunk = []
+      yearTag = undefined
+    }
+    min = min.add(1, 'day')
+  }
+  if (chunk.length) {
+    dayList.push({ yearTag, chunk })
+  }
+  return dayList
+}
+
 export default {
   generatorMonth,
   generatorMonthList,
   transActiveMapping,
-  generatorDateList
+  generatorDateList,
+  generatorDayList
 }

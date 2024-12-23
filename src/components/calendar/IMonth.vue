@@ -1,11 +1,9 @@
 <template>
   <div class="i-month">
     <div class="i-month-row" v-for="(week, index) in calendar" :key="index">
-      <div
-        v-for="day in week"
-        :class="['i-month-cell', !day && 'null-cell', isActive(day) && 'active-cell']"
-        :key="`${index}-${day?.toString()}`"
-      ></div>
+      <template v-for="day in week" :key="`${index}-${day?.toString()}`">
+        <IDay :day="day" :is-active="!!isActive(day)" />
+      </template>
     </div>
   </div>
 </template>
@@ -13,6 +11,7 @@
 import { Dayjs } from 'dayjs'
 import calendarUtil from '../../util/calendar.util'
 import type { ActiveDateMap } from 'types'
+import IDay from './IDay.vue'
 const props = defineProps<{
   month: Dayjs
   activeDays: ActiveDateMap | null
