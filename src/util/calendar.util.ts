@@ -34,7 +34,7 @@ const generatorMonth = (month: Date) => {
 
 const generatorMonthList = (start: Date | string, end: Date | string): Dayjs[] => {
   let min = dayjs(start).set('date', 1)
-  const max = dayjs(end).set('date', 2)
+  const max = dayjs(end).set('month', 11).set('date', 2)
   const monthList = []
   while (min.isBefore(max)) {
     monthList.push(min)

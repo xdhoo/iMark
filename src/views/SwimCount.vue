@@ -8,7 +8,7 @@
       <div class="custom-style">
         <el-segmented v-model="layoutValue" :options="layoutOptions">
           <template #default="{ item }">
-            <el-icon size="16">
+            <el-icon size="18">
               <component :is="item.icon" />
             </el-icon>
           </template>
@@ -47,15 +47,16 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .swim-count {
+  padding: 16px;
+
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     .custom-style .el-segmented {
       --el-segmented-item-selected-color: var(--el-color-white);
       --el-segmented-item-selected-bg-color: #1eadb5;
-      --el-border-radius-base: 18px;
+      --el-border-radius-base: 16px;
     }
     .title {
       font-weight: 500;
@@ -72,6 +73,9 @@ onMounted(() => {
   .calendar-content {
     max-height: 600px;
     overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   .slogan {
     margin-top: 12px;

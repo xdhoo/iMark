@@ -14,7 +14,11 @@
   <template v-if="layout === 'default'">
     <div class="i-calendar">
       <div v-for="month in monthList" :key="month.toString()">
-        <div class="month-title">{{ month.month() + 1 }}月</div>
+        <div v-if="!month.month()"></div>
+        <div class="month-title">
+          <span v-if="!month.month()" class="highlight">{{ month.year() }}</span>
+          <span v-else>{{ month.month() + 1 }}月</span>
+        </div>
         <IMonth :month="month" :active-days="activeMapping" />
       </div>
     </div>
@@ -82,6 +86,11 @@ watch(
     padding: 2px;
     color: #848484;
   }
+  .highlight {
+    font-weight: 700;
+    font-size: 14px;
+    color: #1c9ca3;
+  }
 }
 .i-simple-calendar {
   .chunk {
@@ -89,10 +98,10 @@ watch(
     position: relative;
     .tag {
       position: absolute;
-      font-size: 12px;
-      right: 24px;
-      top: 0;
-      color: #848484;
+      right: 32px;
+      top: -2px;
+      color: #1c9ca3;
+      font-weight: 600;
     }
   }
 }
