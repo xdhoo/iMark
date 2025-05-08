@@ -9,7 +9,9 @@
         <el-segmented v-model="layoutValue" :options="layoutOptions">
           <template #default="{ item }">
             <el-icon size="18">
-              <component :is="item.icon" />
+              <div class="modal-change-item">
+                <img alt="swim" class="icon" :src="getImgUrl(item.icon)" :width="14" :height="14" />
+              </div>
             </el-icon>
           </template>
         </el-segmented>
@@ -23,7 +25,13 @@
         <el-segmented v-model="modeValue" :options="modeOptions">
           <template #default="{ item }">
             <div class="modal-change-item">
-              <img alt="swim" class="icon" :src="getImgUrl(item.value)" :width="18" :height="18" />
+              <img
+                alt="swim"
+                class="icon"
+                :src="getImgUrl(item.value)"
+                :width="getImgSize(item.value)"
+                :height="getImgSize(item.value)"
+              />
             </div>
           </template>
         </el-segmented>
@@ -41,8 +49,8 @@ import { onMounted, ref, watch } from 'vue'
 
 let records = ref<Record[]>([])
 let layoutOptions = ref([
-  { value: 'default', icon: 'Calendar' },
-  { value: 'compact', icon: 'Tickets' }
+  { value: 'default', icon: 'calendar' },
+  { value: 'compact', icon: 'list' }
 ])
 let modeOptions = ref([{ value: 'all' }, { value: 'swim' }, { value: 'tennis' }])
 let layoutValue = ref('default')
@@ -58,6 +66,9 @@ onMounted(() => {
 
 const getImgUrl = (name: string) => {
   return new URL(`/src/assets/${name}.svg`, import.meta.url).href
+}
+const getImgSize = (name: string) => {
+  return name === 'swim' ? 22 : 18
 }
 watch(modeValue, (newVal, oldVal) => {
   if (newVal === oldVal) return
@@ -92,8 +103,19 @@ watch(modeValue, (newVal, oldVal) => {
     justify-content: space-between;
     .custom-style .el-segmented {
       --el-segmented-item-selected-color: var(--el-color-white);
-      --el-segmented-item-selected-bg-color: #1eadb5;
+      --el-segmented-item-selected-bg-color: #fdfdfd;
+      --el-segmented-bg-color: #e7e7e7;
       --el-border-radius-base: 16px;
+    }
+    .custom-style {
+      .modal-change-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          display: block;
+        }
+      }
     }
     .title {
       font-weight: 500;
