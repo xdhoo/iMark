@@ -1,14 +1,17 @@
 <template>
-  <div :class="['cell', !day && 'null-cell', isActive && 'active-cell']" :style="[cellStyle]"></div>
+  <div :class="['cell', !day && 'null-cell', isActive && 'active-cell']" :style="[cellStyle]">
+    <img v-if="isActive" alt="swim" class="icon" :src="imgSrc" :width="imgSize" :height="imgSize" />
+  </div>
 </template>
 <script lang="ts" setup>
 import type { Dayjs } from 'dayjs'
+import type { RecordType } from 'types'
 import { computed } from 'vue'
 
 const props = defineProps<{
   day: Dayjs | null
-  isActive: boolean
   size?: number
+  type?: RecordType
 }>()
 const cellStyle = computed(() => {
   return {
@@ -16,6 +19,10 @@ const cellStyle = computed(() => {
     height: (props.size ? props.size : 16) + 'px'
   }
 })
+
+const imgSize = computed(() => (props.size ?? 16) - 4)
+const isActive = computed(() => !!props.type)
+const imgSrc = computed(() => `../src/assets/${props.type}.svg`)
 </script>
 
 <style lang="scss" scoped>
@@ -25,6 +32,10 @@ const cellStyle = computed(() => {
   border: 2px solid #ffffff;
   border-radius: 4px;
   background-color: #e7e7e7;
+
+  img.icon {
+    display: block;
+  }
 }
 .cell.null-cell {
   background-color: #fff;

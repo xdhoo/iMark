@@ -6,7 +6,7 @@
           {{ chunk.yearTag.year() }}
         </div>
         <template v-for="day in chunk.chunk" :key="day.toString()">
-          <IDay :day="day" :is-active="!!isActive(day)" :size="20" />
+          <IDay :day="day" :type="recordType(day)" :size="20" />
         </template>
       </div>
     </div>
@@ -29,11 +29,11 @@
 import calendarUtil from '../../util/calendar.util'
 import IMonth from './IMonth.vue'
 import { watch, ref, onMounted } from 'vue'
-import type { ActiveDateMap } from 'types'
+import type { ActiveDateMap, Record } from 'types'
 import type { Dayjs } from 'dayjs'
 import IDay from './IDay.vue'
 const props = defineProps<{
-  records: { type: string; date: string }[]
+  records: Record[]
   start: string | Date
   end: string | Date
   layout: string
@@ -43,15 +43,16 @@ const dayList = ref<{ yearTag?: Dayjs; chunk: Dayjs[] }[]>([])
 const activeDates = ref<string[]>([])
 const activeMapping = ref<ActiveDateMap | null>(null)
 
-const isActive = (_date: Dayjs | null) => {
-  return _date && activeMapping.value?.[_date.year()]?.[_date.month()]?.[_date.date()]
+const recordType = (_date: Dayjs | null) => {
+  if (_date === null) return undefined
+  return activeMapping.value?.[_date.year()]?.[_date.month()]?.[_date.date()]
 }
 
 watch(
   () => props.records,
   (newVal) => {
     activeDates.value = newVal.map(({ date }) => date)
-    activeMapping.value = calendarUtil.transActiveMapping(activeDates.value)
+    activeMapping.value = calendarUtil.transActiveMapping(newVal)
   }
 )
 

@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
-import type { ActiveDateMap } from 'types'
+import type { ActiveDateMap, Record } from 'types'
 
 const generatorMonth = (month: Date) => {
   const startOfMonth = dayjs(month).startOf('month')
@@ -44,21 +44,21 @@ const generatorMonthList = (start: Date | string, end: Date | string): Dayjs[] =
   return monthList
 }
 
-const transActiveMapping = (list: string[]) => {
+const transActiveMapping = (list: Record[]) => {
   const activeMapping: ActiveDateMap = {}
   list.forEach((item) => {
-    const _dayjs = dayjs(item)
+    const _dayjs = dayjs(item.date)
     const year = _dayjs.year()
     const month = _dayjs.month()
     const day = _dayjs.date()
     if (Object.prototype.hasOwnProperty.call(activeMapping, year)) {
       if (Object.prototype.hasOwnProperty.call(activeMapping[year], month)) {
-        activeMapping[year][month][day] = true
+        activeMapping[year][month][day] = item.type
       } else {
-        activeMapping[year][month] = { [day]: true }
+        activeMapping[year][month] = { [day]: item.type }
       }
     } else {
-      activeMapping[year] = { [month]: { [day]: true } }
+      activeMapping[year] = { [month]: { [day]: item.type } }
     }
   })
   return activeMapping

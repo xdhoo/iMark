@@ -25,11 +25,12 @@
   </div>
 </template>
 <script lang="ts" setup>
+import type { Record } from 'types'
 import ICalendar from '../components/calendar/ICalendar.vue'
 import { getRecords } from '../services/index'
 import { onMounted, ref } from 'vue'
 
-let records = ref<{ type: string; date: string }[]>([])
+let records = ref<Record[]>([])
 let layoutOptions = ref([
   { value: 'default', icon: 'Calendar' },
   { value: 'compact', icon: 'Tickets' }
@@ -48,6 +49,10 @@ onMounted(() => {
 <style lang="scss" scoped>
 .swim-count {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
 
   .header {
     display: flex;
@@ -71,22 +76,22 @@ onMounted(() => {
     }
   }
   .calendar-content {
-    max-height: 600px;
     overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none;
     }
   }
   .slogan {
-    margin-top: 12px;
+    height: 200px;
+    padding: 12px 0;
     &-dream {
-      font-size: 56px;
+      font-size: 72px;
       font-weight: 700;
       line-height: 56px;
       color: #acacac;
     }
     &-big {
-      font-size: 86px;
+      font-size: 96px;
       font-weight: 700;
       line-height: 18px;
       text-align: right;

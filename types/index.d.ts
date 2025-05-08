@@ -13,5 +13,12 @@ export interface Article {
 }
 
 export interface ActiveDateMap {
-  [key: number]: { [key: number]: { [key: number]: boolean } }
+  [key: number]: { [key: number]: { [key: number]: RecordType } }
 }
+
+export interface Record {
+  type: RecordType
+  date: string
+}
+
+export type RecordType = 'swim' | 'tennis'

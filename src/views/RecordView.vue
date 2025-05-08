@@ -6,6 +6,7 @@
           <div class="title">{{ dayjs(form.date).format('DD MMM') }}</div>
           <el-select v-model="form.type" placeholder="Select" style="width: 80px">
             <el-option :label="'swim'" :value="'swim'" />
+            <el-option :label="'tennis'" :value="'tennis'" />
           </el-select>
         </div>
       </div>
@@ -135,11 +136,12 @@ const handleOpened = () => {
 
 <style lang="scss" scoped>
 .record-container {
-  margin-top: 20%;
   .form {
     max-width: 360px;
     background-color: #fff;
     border-radius: 12px;
+    margin: 0 auto;
+    padding: 24px 0;
     --el-border-radius-base: 8px;
     &-row {
       margin-bottom: 20px;
@@ -172,7 +174,8 @@ const handleOpened = () => {
     }
   }
   .slogan {
-    margin-top: 46px;
+    margin-top: 32px;
+    padding: 0 18px;
     &-dream {
       font-size: 86px;
       font-weight: 700;

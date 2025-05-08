@@ -2,7 +2,7 @@
   <div class="i-month">
     <div class="i-month-row" v-for="(week, index) in calendar" :key="index">
       <template v-for="day in week" :key="`${index}-${day?.toString()}`">
-        <IDay :day="day" :is-active="!!isActive(day)" />
+        <IDay :day="day" :type="recordType(day)" />
       </template>
     </div>
   </div>
@@ -19,8 +19,9 @@ const props = defineProps<{
 
 const calendar = calendarUtil.generatorMonth(props.month.toDate())
 
-const isActive = (_date: Dayjs | null) => {
-  return _date && props.activeDays?.[_date.year()]?.[_date.month()]?.[_date.date()]
+const recordType = (_date: Dayjs | null) => {
+  if (_date === null) return undefined
+  return props.activeDays?.[_date.year()]?.[_date.month()]?.[_date.date()]
 }
 </script>
 <style lang="scss" scoped>
