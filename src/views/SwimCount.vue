@@ -2,8 +2,8 @@
   <div class="swim-count">
     <div class="header">
       <div class="title">
-        累计
-        <span class="highlight"> {{ records.length }} </span>天
+        <div>累计</div>
+        <div class="highlight">{{ records.length }}</div>
       </div>
       <div class="custom-style">
         <el-segmented v-model="layoutValue" :options="layoutOptions">
@@ -19,6 +19,15 @@
       <ICalendar :records="records" start="2024-01-01" :end="new Date()" :layout="layoutValue" />
     </div>
     <div class="slogan">
+      <div class="modal-change">
+        <el-segmented v-model="modeValue" :options="modeOptions">
+          <template #default="{ item }">
+            <div class="modal-change-item">
+              <img alt="swim" class="icon" :src="getImgUrl(item.value)" :width="18" :height="18" />
+            </div>
+          </template>
+        </el-segmented>
+      </div>
       <div class="slogan-dream">DREAM</div>
       <div class="slogan-big">BIG</div>
     </div>
@@ -27,27 +36,50 @@
 <script lang="ts" setup>
 import type { Record } from 'types'
 import ICalendar from '../components/calendar/ICalendar.vue'
-import { getRecords } from '../services/index'
-import { onMounted, ref } from 'vue'
+import { getAllRecords, getRecords } from '../services/index'
+import { onMounted, ref, watch } from 'vue'
 
 let records = ref<Record[]>([])
 let layoutOptions = ref([
   { value: 'default', icon: 'Calendar' },
   { value: 'compact', icon: 'Tickets' }
 ])
+let modeOptions = ref([{ value: 'all' }, { value: 'swim' }, { value: 'tennis' }])
 let layoutValue = ref('default')
+let modeValue = ref('all')
 
 onMounted(() => {
-  getRecords('swim')
+  getAllRecords()
     .then((res) => {
       records.value = res.data
     })
     .catch((err) => console.log(err))
 })
+
+const getImgUrl = (name: string) => {
+  return new URL(`/src/assets/${name}.svg`, import.meta.url).href
+}
+watch(modeValue, (newVal, oldVal) => {
+  if (newVal === oldVal) return
+  if (newVal === 'all') {
+    getAllRecords()
+      .then((res) => {
+        records.value = res.data
+      })
+      .catch((err) => console.log(err))
+  } else {
+    getRecords(newVal)
+      .then((res) => {
+        records.value = res.data
+      })
+      .catch((err) => console.log(err))
+  }
+})
 </script>
 
 <style lang="scss" scoped>
 .swim-count {
+  position: relative;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -68,10 +100,13 @@ onMounted(() => {
       padding: 12px 0;
       font-size: 14px;
       color: #7c7c7c;
+      display: flex;
+      align-items: last baseline;
       .highlight {
         font-weight: 700;
         font-size: 24px;
         color: #1dadb5;
+        margin-left: 8px;
       }
     }
   }
@@ -96,6 +131,25 @@ onMounted(() => {
       line-height: 18px;
       text-align: right;
       color: #1dadb5;
+    }
+    .modal-change {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      .el-segmented {
+        --el-segmented-item-selected-color: var(--el-color-white);
+        --el-segmented-item-selected-bg-color: #9b9b9b;
+        --el-border-radius-base: 16px;
+        --el-segmented-bg-color: #282828;
+      }
+    }
+    .modal-change-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        display: block;
+      }
     }
   }
 }

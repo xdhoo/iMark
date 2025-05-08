@@ -23,6 +23,10 @@ export const getRecords = (type: string) => {
   return axios.post(`${API_URL}/records`, { type })
 }
 
+export const getAllRecords = () => {
+  return axios.post(`${API_URL}/all_records`)
+}
+
 export const saveRecord = (params: { type: string; date: string }) => {
   return axios.post(`${API_URL}/record`, params)
 }

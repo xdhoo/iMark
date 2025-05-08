@@ -1,6 +1,16 @@
 <template>
-  <div :class="['cell', !day && 'null-cell', isActive && 'active-cell']" :style="[cellStyle]">
-    <img v-if="isActive" alt="swim" class="icon" :src="imgSrc" :width="imgSize" :height="imgSize" />
+  <div
+    :class="['cell', !day && 'null-cell', isActive && 'active-cell', type && `active-${type}`]"
+    :style="[cellStyle]"
+  >
+    <img
+      v-if="isActive"
+      alt="swim"
+      class="icon"
+      :src="getImgUrl()"
+      :width="imgSize"
+      :height="imgSize"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -20,9 +30,12 @@ const cellStyle = computed(() => {
   }
 })
 
-const imgSize = computed(() => (props.size ?? 16) - 4)
+const imgSize = computed(() => (props.size ?? 16) - (props.type === 'tennis' ? 9 : 6))
 const isActive = computed(() => !!props.type)
-const imgSrc = computed(() => `../src/assets/${props.type}.svg`)
+
+const getImgUrl = () => {
+  return new URL(`/src/assets/${props.type}.svg`, import.meta.url).href
+}
 </script>
 
 <style lang="scss" scoped>
@@ -32,6 +45,9 @@ const imgSrc = computed(() => `../src/assets/${props.type}.svg`)
   border: 2px solid #ffffff;
   border-radius: 4px;
   background-color: #e7e7e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img.icon {
     display: block;
@@ -43,5 +59,9 @@ const imgSrc = computed(() => `../src/assets/${props.type}.svg`)
 
 .cell.active-cell {
   background-color: #1eadb5;
+}
+
+.cell.active-cell.active-tennis {
+  background-color: #53b51e;
 }
 </style>
