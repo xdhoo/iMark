@@ -5,7 +5,7 @@
         <div :class="['cell', day.isSame(active, 'day') && 'active']" @click="handleClick(day)">
           <p>{{ dayMap[day.day()] }}</p>
           <span>{{ day.date() }}</span>
-          <div class="mark" v-if="isRecord(day)"></div>
+          <div :class="['mark', getClass(day)]" v-if="isRecord(day)"></div>
         </div>
       </template>
       <div id="end_target"></div>
@@ -27,7 +27,7 @@ const dayMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const dateList = calendarUtil.generatorDateList('2024-11-01', new Date())
 const emit = defineEmits(['on-change'])
-const activeDates = ref<string[]>([])
+const activeDates = ref(new Map())
 
 onMounted(() => {
   setTimeout(() => {
@@ -38,7 +38,11 @@ onMounted(() => {
 watch(
   () => props.records,
   (newVal) => {
-    activeDates.value = newVal.map(({ date }) => date)
+    const map = new Map()
+    newVal.forEach((item) => {
+      map.set(item.date, item.type)
+    })
+    activeDates.value = map
   }
 )
 
@@ -47,7 +51,10 @@ const handleClick = (date: Dayjs) => {
 }
 
 const isRecord = (day: Dayjs) => {
-  return activeDates.value.includes(day.format('YYYY-MM-DD'))
+  return activeDates.value.get(day.format('YYYY-MM-DD'))
+}
+const getClass = (day: Dayjs) => {
+  return activeDates.value.get(day.format('YYYY-MM-DD'))
 }
 </script>
 
@@ -86,8 +93,11 @@ const isRecord = (day: Dayjs) => {
         width: 6px;
         height: 6px;
         border-radius: 3px;
-        background-color: #09a9b1;
+        background-color: #1eadb5;
         align-self: center;
+      }
+      .mark.tennis {
+        background-color: #53b51e;
       }
     }
     .cell.active {

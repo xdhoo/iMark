@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRecords, saveRecord } from '../services/index'
+import { getAllRecords, saveRecord } from '../services/index'
 import dayjs from 'dayjs'
 import IDatePicker from '../components/date-picker/IDatePicker.vue'
 import { ElMessage } from 'element-plus'
@@ -72,7 +72,7 @@ onMounted(() => {
 })
 
 const fetchRecord = () => {
-  getRecords('swim')
+  getAllRecords()
     .then((res) => {
       records.value = res.data
     })

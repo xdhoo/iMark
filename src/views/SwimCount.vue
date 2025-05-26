@@ -36,8 +36,8 @@
           </template>
         </el-segmented>
       </div>
-      <div class="slogan-dream">DREAM</div>
-      <div class="slogan-big">BIG</div>
+      <!-- <div class="slogan-dream">DREAM</div>
+      <div class="slogan-big">BIG</div> -->
     </div>
   </div>
 </template>
@@ -139,7 +139,7 @@ watch(modeValue, (newVal, oldVal) => {
     }
   }
   .slogan {
-    height: 200px;
+    height: 70px;
     padding: 12px 0;
     &-dream {
       font-size: 72px;
