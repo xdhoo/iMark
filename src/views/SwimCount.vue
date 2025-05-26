@@ -119,7 +119,7 @@ watch(modeValue, (newVal, oldVal) => {
     }
     .title {
       font-weight: 500;
-      padding: 12px 0;
+      padding: 2px 0;
       font-size: 14px;
       color: #7c7c7c;
       display: flex;
@@ -139,8 +139,8 @@ watch(modeValue, (newVal, oldVal) => {
     }
   }
   .slogan {
-    height: 70px;
     padding: 12px 0;
+    text-align: right;
     &-dream {
       font-size: 72px;
       font-weight: 700;
@@ -155,9 +155,6 @@ watch(modeValue, (newVal, oldVal) => {
       color: #1dadb5;
     }
     .modal-change {
-      position: absolute;
-      bottom: 24px;
-      left: 24px;
       .el-segmented {
         --el-segmented-item-selected-color: var(--el-color-white);
         --el-segmented-item-selected-bg-color: #9b9b9b;
